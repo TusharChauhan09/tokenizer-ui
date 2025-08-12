@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { InputBox } from "@/components/ui/input-box";
 import { ActionButton } from "@/components/ui/action-button";
 import { OutputBox } from "@/components/ui/output-box";
@@ -9,14 +8,16 @@ import { cn } from "@/lib/utils";
 import { BCK_API } from "@/config/url";
 
 const HomePage = () => {
+  // State for tokenization flow
   const [inputText, setInputText] = useState("");
   const [tokens, setTokens] = useState("");
   const [encodedResult, setEncodedResult] = useState("");
 
+  // State for decoding flow
   const [decodeInput, setDecodeInput] = useState("");
   const [decodedResult, setDecodedResult] = useState("");
 
-
+  // Shift value for encoding/decoding
   const [shift, setShift] = useState("5");
 
   const handleGenerateTokens = async () => {
@@ -92,13 +93,9 @@ const HomePage = () => {
       console.log("Encode response:", data);
 
       if (data.success && data.encodedTokens) {
-        
-        const encodedString = `[${data.encodedTokens
-          .map((token: string) => `"${token}"`)
-          .join(", ")}]`;
-        setEncodedResult(encodedString);
-        
-        setDecodeInput(encodedString);
+        setEncodedResult(JSON.stringify(data.encodedTokens, null, 2));
+        // Auto-populate decode input
+        setDecodeInput(JSON.stringify(data.encodedTokens, null, 2));
       } else {
         throw new Error("Invalid response format");
       }
@@ -141,11 +138,7 @@ const HomePage = () => {
       console.log("Decode response:", data);
 
       if (data.success && data.decodedSentence) {
-       
-        const decodedString = `[${data.restoredTokens
-          .map((token: string) => `"${token}"`)
-          .join(", ")}]`;
-        setDecodedResult(decodedString);
+        setDecodedResult(data.decodedSentence);
       } else {
         throw new Error("Invalid response format");
       }
@@ -160,25 +153,14 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: "#F3F4F6" }}>
-      
-      <div className="relative  min-h-[400px] flex items-center justify-center">
-        <AnimatedGridPattern
-          numSquares={30}
-          maxOpacity={0.1}
-          duration={3}
-          repeatDelay={1}
-          className={cn(
-            "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
-            "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
-          )}
-        />
-
+    <div className="min-h-screen w-full bg-white">
+      {/* Centered Title in the middle of the screen */}
+      <div className="relative min-h-[400px] flex items-center justify-center bg-white">
         <div className="relative z-10 text-center">
-          <h1 className="text-8xl font-bold text-gray-900 jap tracking-widest">
+          <h1 className="text-9xl font-bold tracking-wide text-gray-900 jap">
             Tokenizer
           </h1>
-          <p className="mt-6 text-4xl leading-8 text-gray-600 jap">
+          <p className="mt-6 text-5xl jap leading-8 text-gray-600">
             Text tokenization, encoding, and decoding encryption
           </p>
         </div>
@@ -186,7 +168,6 @@ const HomePage = () => {
 
       <div className="p-8">
         <div className="max-w-6xl mx-auto space-y-8">
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <InputBox
               label="enter"
@@ -207,6 +188,7 @@ const HomePage = () => {
             </ActionButton>
           </div>
 
+          {/* Row 2: Encode Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <div className="flex flex-col space-y-4">
               <div className="flex items-center space-x-4">
@@ -231,7 +213,7 @@ const HomePage = () => {
             />
           </div>
 
-        
+          {/* Decoding Section */}
           <div className="border-t-2 border-gray-300 pt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               <div className="flex flex-col space-y-4">
