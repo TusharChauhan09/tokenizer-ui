@@ -154,6 +154,13 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen w-full bg-white">
+      {/* Disclaimer in top right corner */}
+      <div className="fixed top-4 right-4 z-50 max-w-xs bg-yellow-50 border border-yellow-200 rounded-lg p-3 shadow-sm">
+        <p className="text-xs text-yellow-800 font-medium">
+          ⚠️ Render server may take time to start, please wait for 1 min
+        </p>
+      </div>
+
       {/* Centered Title in the middle of the screen */}
       <div className="relative min-h-[400px] flex items-center justify-center bg-white">
         <div className="relative z-10 text-center">
