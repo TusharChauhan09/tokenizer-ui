@@ -1,0 +1,1 @@
+export const BCK_API = "https://tokenizer-api-axrr.onrender.com/api/tokens"
